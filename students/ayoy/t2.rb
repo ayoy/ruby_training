@@ -16,14 +16,14 @@
 #
 
 module Intelligence
-  # TODO: Add accessor
+  attr_reader :intelligence
 
   def init_intelligence(hash)
-    # TODO: Implement
+    @intelligence = hash[:intelligence]
   end
 
   def solve(difficulty)
-    # TODO: Implement
+    @intelligence += 1 if @intelligence >= difficulty
   end
 end
 
@@ -34,10 +34,10 @@ module Mortality
   end
 
   module InstanceMethods
-    # TODO: Add accessor
+    attr_reader :age
 
     def init_age(hash)
-      # TODO: Implement
+      @age = hash[:age]
     end
   end
 
@@ -45,12 +45,13 @@ module Mortality
     def has_age_groups(hash)
       hash.keys.each do |group_name|
         define_method("#{group_name}?") do
-          # TODO: Implement
+          hash[group_name].include? @age
         end
       end
 
       define_method("dead?") do
-        # TODO: Implement
+        groups_upper_limits = hash.values.map { |v| v.max }
+        !(0..groups_upper_limits.max).include? @age
       end
     end
   end
@@ -62,7 +63,7 @@ class Dog
   has_age_groups :young => (0..5), :old => (6..20)
 
   def initialize(hash = {})
-    # TODO: Implement
+    init_age(hash)
   end
 end
 
@@ -73,7 +74,8 @@ class Human
   has_age_groups :young => (0..16), :middle_aged => (17..50), :old => (51..80)
 
   def initialize(hash = {})
-    # TODO: Implement
+    init_age(hash)
+    init_intelligence(hash)
   end
 end
 
@@ -81,7 +83,7 @@ class Ghost
   include Intelligence
 
   def initialize(hash = {})
-    # TODO: Implement
+    init_intelligence(hash)
   end
 end
 
