@@ -23,7 +23,11 @@ module Intelligence
   end
 
   def solve(difficulty)
-    @intelligence += 1 if @intelligence >= difficulty
+    if @intelligence >= difficulty
+      @intelligence += 1
+      return true
+    end
+    false
   end
 end
 
@@ -45,13 +49,15 @@ module Mortality
     def has_age_groups(hash)
       hash.keys.each do |group_name|
         define_method("#{group_name}?") do
-          hash[group_name].include? @age
+          hash[group_name].include?(@age)
         end
       end
 
       define_method("dead?") do
-        groups_upper_limits = hash.values.map { |v| v.max }
-        !(0..groups_upper_limits.max).include? @age
+        hash.values.any? do |v|
+          return false if v.include?(@age)
+        end
+        true
       end
     end
   end
